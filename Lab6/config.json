@@ -5,8 +5,8 @@
     "port": 587,
     "secure": false,
     "auth": {
-      "user": "ibuypowerclub@gmail.com",
-      "pass": "abap wjhp scve smmi"
+      "user": "#",
+      "pass": "#"
     }
   }
 }
