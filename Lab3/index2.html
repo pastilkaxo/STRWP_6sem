@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="result"></div>
+    <script>
+      let result = document.getElementById("result");
+      result.innerHTML = "";
+      let x = 1;
+      const t = Date.now();
+      for (let k = 1; k <= 20; k++) {
+        fetch(`http://localhost:5000/fact?k=${k}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            result.innerHTML += `<p>${x++}. Результат: ${Date.now() - t}-${
+              data.k
+            }/${data.fact}</p><br>`;
+          });
+      }
+    </script>
+  </body>
+</html>

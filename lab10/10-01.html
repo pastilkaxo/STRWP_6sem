@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <h1>task 10-01</h1>
+    <button onclick="startWS()">start WS</button>
+    <div id="messages"></div>
+    <script>
+      let startWS = () => {
+        let socket = new WebSocket("ws://localhost:4000/"); // открыть вс соединение
+        let sender;
+        let messages = document.getElementById("messages");
+        let str = "";
+        socket.onopen = () => { // соединение установлено
+          let n = 0;
+          sender = setInterval(
+            () => socket.send("10-01-client : " + n++),
+            3 * 1000
+          );
+        };
+
+        socket.onmessage = (message) => { // получены данные
+          str += message.data;
+          str += "\n";
+          messages.innerHTML = str;
+          //console.log(message.data)
+        };
+
+        socket.onclose = (e) => { // закрытие соединения
+          console.log("socket.onclose() ", e);
+        };
+        setTimeout(() => {
+          clearInterval(sender);
+          socket.close();
+        }, 25 * 1000);
+      };
+    </script>
+  </body>
+</html>

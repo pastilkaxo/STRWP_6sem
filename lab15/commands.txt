@@ -1,0 +1,13 @@
+powershell
+.\emsdk update
+.\emsdk install latest
+.\emsdk activate latest
+emsdk_env.bat
+
+emcc C:\Users\Влад\Desktop\NodeJS\lab15\lab15.c -Os -s WASM=1 -s SIDE_MODULE=1 -o C:\Users\Влад\Desktop\NodeJS\lab15\calc.wasm
+emcc lab15.c -Os -s WASM=1 -s EXPORTED_FUNCTIONS="['_sum','_sub','_mul','_div']" -o calc.wasm
+emcc C:\Users\Влад\Desktop\NodeJS\lab15\lab15.c  -Os -s WASM=1 -s "EXPORTED_FUNCTIONS=['_sum','_mul','_sub']" -s MODULARIZE=1 -s EXPORT_NAME="Module" -o C:\Users\Влад\Desktop\NodeJS\lab15\lab15.js
+emcc lab15.c -Os -s WASM=1 -s "EXPORTED_FUNCTIONS=['_sum','_mul','_sub']" -o lab15.js
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\Users\Влад\Desktop\NodeJS\lab15\public\calc.wasm")) > base64.txt
+
+

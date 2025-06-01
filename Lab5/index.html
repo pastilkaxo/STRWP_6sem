@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 4</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .forma {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 500px;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lab 05</h1>
+    <div id="result"></div>
+    <button onclick="GET()">Get()</button>
+    <div class="forma">
+      <label>ID:</label>
+      <input type="number" placeholder="id" id="ID" min="0" />
+      <label>Имя:</label>
+      <input type="text" placeholder="Имя" id="Name" />
+      <label>Дата рождения:</label>
+      <input type="date" placeholder="BDay" id="bDay" />
+      <button onclick="POST()">POST</button>
+      <button onclick="PUT()">PUT</button>
+      <button onclick="DELETE()">DELETE</button>
+    </div>
+    <script>
+      let result = document.getElementById("result");
+      let id = document.getElementById("ID");
+      let name = document.getElementById("Name");
+      let bDay = document.getElementById("bDay");
+
+      function emptCheck(id, name, bDay) {
+        if (id.value == null && name.value == "" && bDay.value == "") {
+          console.log("Data is empty!");
+          return true;
+        } else return false;
+      }
+
+      function GET() {
+        console.log("GET");
+        fetch("http://localhost:5000/api/db", {
+          method: "GET",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((pdata) => {
+            result.innerHTML = "";
+            pdata.forEach((el) => {
+              result.innerHTML += `${el.id}. ${el.name} ${el.bDay}</br>`;
+            });
+          });
+      }
+      function POST() {
+        console.log("POST");
+        if (!emptCheck(id, name, bDay)) {
+          fetch("http://localhost:5000/api/db", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              id: id.value,
+              name: name.value,
+              bDay: bDay.value,
+            }),
+          })
+            .then((res) => {
+              return res.json();
+            })
+            .then((pdata) => {
+              console.log(pdata);
+              (id.value = 0), (name.value = "");
+              bDay.value = "0000.00.00";
+            });
+        }
+      }
+      function PUT() {
+        console.log("PUT");
+        if (!emptCheck(id, name, bDay)) {
+          fetch("http://localhost:5000/api/db", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              id: id.value,
+              name: name.value,
+              bDay: bDay.value,
+            }),
+          })
+            .then((res) => {
+              return res.json();
+            })
+            .then((pdata) => {
+              console.log(pdata);
+              (id.value = 0), (name.value = "");
+              bDay.value = "0000.00.00";
+            });
+        }
+      }
+      function DELETE() {
+        console.log("DELETE");
+        if (!emptCheck(id, name, bDay)) {
+          fetch("http://localhost:5000/api/db", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              id: id.value,
+              name: name.value,
+              bDay: bDay.value,
+            }),
+          })
+            .then((res) => {
+              return res.json();
+            })
+            .then((pdata) => {
+              console.log(pdata);
+              id.value = 0;
+            });
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>xhr ФИО:<small id="fio"></small></h1>
+  </body>
+  <script>
+    let con = new XMLHttpRequest();
+    con.open("GET", "http://localhost:5000/api/name", true);
+    con.send();
+    let fio = document.getElementById("fio");
+    con.onload = function () {
+      // after answer
+      if (con.status != 200) {
+        fio.textContent = `${con.status} : ${con.statusText}`;
+      } else {
+        let data = con.response;
+        fio.textContent = data;
+      }
+    };
+
+    con.onerror() = function(){
+      alert(`404`);
+    }
+  </script>
+</html>

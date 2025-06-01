@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>fetch ФИО:<small id="fio"></small></h1>
+  </body>
+  <script>
+    let fio = document.getElementById("fio");
+
+    async function f() {
+      try {
+        let response = await fetch("http://localhost:5000/api/name", {
+          method: "GET",
+        });
+        if (response.ok) {
+          let text = await response.text();
+          fio.textContent = text;
+        } else {
+          fio.textContent = "404";
+        }
+      } catch {
+        alert("Ошибка HTTP: " + response.status);
+      }
+    }
+
+    f();
+  </script>
+</html>

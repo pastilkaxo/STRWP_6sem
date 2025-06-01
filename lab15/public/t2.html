@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WASM Calculator</title>
+  </head>
+  <body>
+    <h1>WASM Calculator (Server)</h1>
+
+    <div>
+      <input type="number" id="x" value="3" />
+      <input type="number" id="y" value="4" />
+      <button onclick="runWasm()">Calculate</button>
+    </div>
+
+    <p>sum(3,4) = <span id="rsum"></span></p>
+    <p>sub(3,4) = <span id="rsub"></span></p>
+    <p>mul(3,4) = <span id="rmul"></span></p>
+
+    <script>
+      let wasmInstance;
+
+      async function initWasm() {
+        const response = await fetch("http://localhost:3000/wasm");
+        const wasmBuffer = await response.arrayBuffer();
+        wasmInstance = await WebAssembly.instantiate(wasmBuffer);
+      }
+
+      function runWasm() {
+        const x = parseInt(document.getElementById("x").value);
+        const y = parseInt(document.getElementById("y").value);
+
+        document.getElementById("rsum").textContent =
+          wasmInstance.instance.exports.sum(x, y);
+        document.getElementById("rsub").textContent =
+          wasmInstance.instance.exports.sub(x, y);
+        document.getElementById("rmul").textContent =
+          wasmInstance.instance.exports.mul(x, y);
+      }
+
+      window.onload = initWasm;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <title>Lab18</title>
+    <meta charset="utf-8" />
+    <style>
+      #get_result {
+        border: 3px solid black;
+        padding: 5px;
+        margin: 10px;
+        width: 550px;
+      }
+      .error {
+        color: red;
+        white-space: pre-wrap; /* Для сохранения форматирования JSON */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="get_result"></div>
+    <button onclick="Get()">GET</button>
+    <br /><br />
+    Teacher: <input name="Teacher" id="Teacher" /> <br /><br />
+    Teacher_name: <input id="Teacher_name" /> <br /><br />
+    Pulpit: <input id="Pulpit" /> <br /><br />
+    <button onclick="Post()">Post</button>
+    <br /><br />
+    Teacher: <input id="TeacherPut" /> <br /><br />
+    Teacher_name: <input id="Teacher_namePut" /> <br /><br />
+    Pulpit: <input id="PulpitPut" /> <br /><br />
+    <button onclick="Put()">Put</button>
+    <br /><br />
+    Teacher: <input id="TeacherDel" /> <br /><br />
+    <button onclick="Del()">Del</button>
+    <br /><br /><br /><br />
+    <div id="result"></div>
+    <script type="text/javascript">
+      const Teacher = document.getElementById("Teacher");
+      const Teacher_name = document.getElementById("Teacher_name");
+      const Pulpit = document.getElementById("Pulpit");
+      const TeacherPut = document.getElementById("TeacherPut");
+      const Teacher_namePut = document.getElementById("Teacher_namePut");
+      const PulpitPut = document.getElementById("PulpitPut");
+      const TeacherDel = document.getElementById("TeacherDel");
+      const get_result = document.getElementById("get_result");
+      const result = document.getElementById("result");
+
+      function displayError(error) {
+        console.error("Error:", error);
+        result.innerHTML = `<span class="error">${JSON.stringify(
+          error,
+          null,
+          2
+        )}</span>`;
+      }
+
+      function Get() {
+        fetch("http://localhost:3000/api/teachers", {
+          method: "GET",
+          headers: { "Accept": "application/json" },
+        })
+          .then((response) => {
+            if (!response.ok)
+              return response.json().then((err) => {
+                throw err;
+              });
+            return response.json();
+          })
+          .then((data) => {
+            get_result.innerHTML = "";
+            if (Array.isArray(data)) {
+              data.forEach((el) => {
+                get_result.innerHTML += `${el.teacher}. ${el.teacher_name} ${el.pulpit}<br/>`;
+              });
+            } else {
+              throw new Error("Invalid data format received");
+            }
+          })
+          .catch(displayError);
+      }
+
+      function Post() {
+        fetch("http://localhost:3000/api/teachers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: JSON.stringify({
+            teacher: Teacher.value,
+            teacher_name: Teacher_name.value,
+            pulpit: Pulpit.value,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok)
+              return response.json().then((err) => {
+                throw err;
+              });
+            return response.json();
+          })
+          .then((data) => {
+            result.innerHTML = "Добавлено: " + JSON.stringify(data);
+          })
+          .catch(displayError);
+      }
+
+      function Put() {
+        fetch("http://localhost:3000/api/teachers", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: JSON.stringify({
+            teacher: TeacherPut.value,
+            teacher_name: Teacher_namePut.value,
+            pulpit: PulpitPut.value,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok)
+              return response.json().then((err) => {
+                throw err;
+              });
+            return response.json();
+          })
+          .then((data) => {
+            result.innerHTML = "Обновлено: " + JSON.stringify(data);
+          })
+          .catch(displayError);
+      }
+
+      function Del() {
+        fetch(`http://localhost:3000/api/teachers/${TeacherDel.value}`, {
+          method: "DELETE",
+          headers: { "Accept": "application/json" },
+        })
+          .then((response) => {
+            if (!response.ok)
+              return response.json().then((err) => {
+                throw err;
+              });
+            return response.json();
+          })
+          .then((data) => {
+            result.innerHTML = "Удалено: " + JSON.stringify(data);
+          })
+          .catch(displayError);
+      }
+    </script>
+  </body>
+</html>

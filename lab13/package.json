@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "https": "^1.0.0",
+    "mime": "^4.0.7",
+    "openssl": "^2.0.0",
+    "openssl-nodejs": "^1.0.5"
+  }
+}
